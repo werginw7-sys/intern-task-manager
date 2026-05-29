@@ -1,0 +1,19 @@
+{
+  "name": "intern-task-manager",
+  "version": "1.0.0",
+  "description": "Full-stack task manager app for the intern assignment.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "task-manager",
+    "assignment",
+    "node"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="auth-panel" id="authPanel">
+        <div>
+          <p class="eyebrow">Intern Assignment</p>
+          <h1>Task Manager</h1>
+          <p class="intro">Organize work across Todo, In Progress, and Done with a simple authenticated workspace.</p>
+        </div>
+
+        <div class="auth-card">
+          <div class="tabs" role="tablist" aria-label="Authentication mode">
+            <button class="tab active" id="loginTab" type="button">Login</button>
+            <button class="tab" id="registerTab" type="button">Register</button>
+          </div>
+
+          <form id="authForm" class="form">
+            <label class="field" id="nameField">
+              <span>Name</span>
+              <input id="nameInput" name="name" type="text" autocomplete="name" placeholder="Your name">
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input id="emailInput" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input id="passwordInput" name="password" type="password" autocomplete="current-password" placeholder="Minimum 6 characters" required>
+            </label>
+            <button class="primary" type="submit" id="authSubmit">Login</button>
+            <p class="message" id="authMessage" role="alert"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="app-panel hidden" id="appPanel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h1>Tasks</h1>
+          </div>
+          <div class="user-actions">
+            <span id="userBadge"></span>
+            <button class="ghost" type="button" id="logoutButton">Logout</button>
+          </div>
+        </header>
+
+        <section class="composer">
+          <form id="taskForm" class="task-form">
+            <input type="hidden" id="taskId">
+            <label class="field">
+              <span>Title</span>
+              <input id="taskTitle" type="text" placeholder="Design auth flow" required>
+            </label>
+            <label class="field">
+              <span>Description</span>
+              <textarea id="taskDescription" rows="3" placeholder="Add notes, context, or acceptance criteria"></textarea>
+            </label>
+            <label class="field">
+              <span>Stage</span>
+              <select id="taskStage">
+                <option>Todo</option>
+                <option>In Progress</option>
+                <option>Done</option>
+              </select>
+            </label>
+            <div class="form-actions">
+              <button class="primary" type="submit" id="taskSubmit">Create task</button>
+              <button class="ghost hidden" type="button" id="cancelEdit">Cancel</button>
+            </div>
+            <p class="message" id="taskMessage" role="alert"></p>
+          </form>
+        </section>
+
+        <div class="board-toolbar">
+          <div>
+            <p class="eyebrow">Board</p>
+            <h2>Current workload</h2>
+          </div>
+          <button class="ghost" type="button" id="refreshButton">Refresh</button>
+        </div>
+
+        <div class="status-line" id="statusLine">Loading tasks...</div>
+        <section class="board" id="board" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <template id="columnTemplate">
+      <section class="column">
+        <div class="column-head">
+          <h3></h3>
+          <span class="count"></span>
+        </div>
+        <div class="task-list"></div>
+      </section>
+    </template>
+
+    <template id="taskTemplate">
+      <article class="task-card">
+        <div>
+          <h4></h4>
+          <p></p>
+        </div>
+        <div class="task-meta"></div>
+        <div class="task-actions">
+          <button type="button" class="icon-button edit-button" title="Edit task" aria-label="Edit task">Edit</button>
+          <button type="button" class="icon-button delete-button" title="Delete task" aria-label="Delete task">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
