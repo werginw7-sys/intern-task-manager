@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: intern-task-manager-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 24.15.0
+      - key: FRONTEND_ORIGIN
+        value: https://intern-task-manager-frontend.onrender.com
+
+  - type: web
+    name: intern-task-manager-frontend
+    runtime: static
+    buildCommand: npm install && npm run build:frontend
+    staticPublishPath: ./public
+    envVars:
+      - key: API_BASE_URL
+        value: https://intern-task-manager-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

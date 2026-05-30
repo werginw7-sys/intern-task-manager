@@ -57,15 +57,42 @@ http://localhost:3000
 - Bearer tokens are stored in `localStorage` for simplicity. In a production app, HTTP-only cookies and CSRF protection would be preferable.
 - There is no email verification or password reset flow because the assessment asks for a small complete implementation.
 
-## Deployment
+## Deployment On Render
 
-Deploy the full app as a Node service on a free platform such as Render, Railway, or Fly.io.
+This repo includes `render.yaml`, so Render can create two separate services from one Blueprint:
 
-Recommended Render setup:
+- Backend: `intern-task-manager-api`
+- Frontend: `intern-task-manager-frontend`
 
-- Build command: leave empty or use `npm install`
+### Blueprint Deployment
+
+1. Open Render and choose **New > Blueprint**.
+2. Select this GitHub repo.
+3. Keep branch as `main`.
+4. Leave Blueprint Path as `render.yaml`.
+5. Click **Apply** or **Create Blueprint**.
+
+Render will create:
+
+- Frontend link: `https://intern-task-manager-frontend.onrender.com`
+- Backend link: `https://intern-task-manager-api.onrender.com`
+
+### Manual Deployment Alternative
+
+If you do not use Blueprint, create these two services manually.
+
+Backend web service:
+
+- Runtime: Node
+- Build command: `npm install`
 - Start command: `node server.js`
-- Environment: Node
-- Port: the app uses `process.env.PORT`, so Render can assign the port automatically
+- Environment variable: `FRONTEND_ORIGIN=https://your-frontend-service.onrender.com`
 
-Submit the deployed URL as both frontend and backend live link because this single Node service serves the frontend and API together.
+Frontend static site:
+
+- Runtime: Static
+- Build command: `npm install && npm run build:frontend`
+- Publish directory: `public`
+- Environment variable: `API_BASE_URL=https://your-backend-service.onrender.com`
+
+The frontend uses `API_BASE_URL` at build time to call the separate backend service.

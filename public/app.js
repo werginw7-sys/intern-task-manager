@@ -1,4 +1,5 @@
 const stages = ["Todo", "In Progress", "Done"];
+const API_BASE_URL = (window.APP_CONFIG?.API_BASE_URL || localStorage.getItem("task-manager-api-url") || "").replace(/\/$/, "");
 const state = {
   token: localStorage.getItem("task-manager-token") || "",
   user: null,
@@ -41,7 +42,7 @@ async function api(path, options = {}) {
 
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
 
-  const response = await fetch(path, { ...options, headers });
+  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {

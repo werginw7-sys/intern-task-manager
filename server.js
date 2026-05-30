@@ -9,6 +9,7 @@ const DATA_DIR = path.join(__dirname, "data");
 const DATA_FILE = path.join(DATA_DIR, "store.json");
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24;
 const STAGES = new Set(["Todo", "In Progress", "Done"]);
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "*";
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -38,12 +39,26 @@ async function writeStore(store) {
   await fs.writeFile(DATA_FILE, JSON.stringify(store, null, 2));
 }
 
+function getCorsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": FRONTEND_ORIGIN,
+    "Access-Control-Allow-Methods": "GET,POST,PATCH,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+  };
+}
+
 function sendJson(res, status, body) {
   res.writeHead(status, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
+    "Cache-Control": "no-store",
+    ...getCorsHeaders()
   });
   res.end(JSON.stringify(body));
+}
+
+function sendOptions(res) {
+  res.writeHead(204, getCorsHeaders());
+  res.end();
 }
 
 function sendError(res, status, message) {
@@ -255,6 +270,10 @@ async function serveStatic(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname.startsWith("/api/")) {
+    if (req.method === "OPTIONS") {
+      sendOptions(res);
+      return;
+    }
     await handleApi(req, res, url.pathname);
     return;
   }

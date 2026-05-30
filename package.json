@@ -4,6 +4,7 @@
   "description": "Full-stack task manager app for the intern assignment.",
   "main": "server.js",
   "scripts": {
+    "build:frontend": "node scripts/generate-frontend-config.js",
     "start": "node server.js"
   },
   "engines": {
